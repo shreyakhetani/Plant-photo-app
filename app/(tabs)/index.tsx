@@ -42,10 +42,16 @@ export default function ListScreen() {
                   
                   <Image source={{ uri: plant.photoUri }} style={styles.image} />
                 </View>
+                <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={() => navigation.navigate('scan', { plant: plant })}
+                >
+                <Text style={styles.editButtonText}>Edit</Text>
+              </TouchableOpacity>
               </View>
             ))
           ) : (
-            <Text style={[styles.noPlantsText, themeStyles.text]}>No plants found. Add some plants!</Text>
+            <Text style={[styles.noPlantsText, themeStyles.text]}>No plants found.</Text>
           )}
         </ScrollView>
       </KeyboardAvoidingView>
@@ -131,6 +137,19 @@ const styles = StyleSheet.create({
   addButtonText: {
     color: 'white',
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+  editButton: {
+    marginTop: 10,
+    backgroundColor: '#FF9800',
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  editButtonText: {
+    color: 'white',
+    fontSize: 16,
     fontWeight: 'bold',
   },
 });

@@ -11,9 +11,15 @@ const plantsSlice = createSlice({
     addPlant(state, action: PayloadAction<Plant>) {
       state.plants.push(action.payload);
     },
+    updatePlant(state, action: PayloadAction<Plant>) {
+      const index = state.plants.findIndex((plant) => plant.id === action.payload.id);
+      if (index !== -1) {
+        state.plants[index] = action.payload;
+      }
+    },
   },
 });
 
-export const { addPlant } = plantsSlice.actions;
+export const { addPlant, updatePlant } = plantsSlice.actions;
 
 export default plantsSlice.reducer;

@@ -12,27 +12,35 @@ import {
   SafeAreaView,
 } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { useDispatch } from 'react-redux';
-import { addPlant } from '@/redux/plantsSlice';
+import { addPlant, updatePlant } from '@/redux/plantsSlice';
 
 export default function ScanView() {
+  const route = useRoute();
+  const [plant, setPlant] = useState<Plant>();
   const [facing, setFacing] = useState<CameraType>('back');
   const [permission, requestPermission] = useCameraPermissions();
   const cameraRef = useRef<CameraView>(null);
-  const [photoUri, setPhotoUri] = useState<string | undefined>(undefined);
-  const [name, setName] = useState('');
-  const [notes, setNotes] = useState('');
+  const [id, setId] = useState<string | undefined>();
+  const [dateAdded, setdateAdded] = useState<string | undefined>();
+  const [photoUri, setPhotoUri] = useState<string | undefined>();
+  const [name, setName] = useState();
+  const [notes, setNotes] = useState();
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const [key, setKey] = useState(0);
 
   useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      setKey(prevKey => prevKey + 1);
-    });
-    return unsubscribe;
-  }, [navigation]);
+      if (route?.params?.plant) {
+        const plant = route?.params?.plant;
+        setPlant(plant);
+        setId(plant.id);
+        setdateAdded(plant.dateAdded);
+        setPhotoUri(plant.photoUri);
+        setName(plant.name);
+        setNotes(plant.notes);
+      }
+    }, [route?.params?.plant]);
 
   if (!permission) {
     return <View />;
@@ -76,13 +84,19 @@ export default function ScanView() {
     }
 
     const newPlant: Plant = {
-      id: new Date().toISOString(),
+      id: id || new Date().toISOString(),
       name,
       notes,
-      dateAdded: new Date().toLocaleDateString(),
+      dateAdded: dateAdded || new Date().toLocaleDateString(),
       photoUri: photoUri,
     };
-    dispatch(addPlant(newPlant));
+
+    if (plant) {
+      dispatch(updatePlant(newPlant));
+    } else {
+      dispatch(addPlant(newPlant));
+    }
+
     navigation.reset({
       index: 0,
       routes: [{ name: 'index' } as never],
