@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef , useEffect} from 'react';
 import {
   View,
   Text,
-  Button,
   StyleSheet,
   TouchableOpacity,
   Image,
@@ -14,14 +13,8 @@ import {
 } from 'react-native';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useNavigation } from '@react-navigation/native';
-
-interface Plant {
-  id: string;
-  name: string;
-  notes: string;
-  dateAdded: string;
-  photoUri: string;
-}
+import { useDispatch } from 'react-redux';
+import { addPlant } from '@/redux/plantsSlice';
 
 export default function ScanView() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -31,6 +24,15 @@ export default function ScanView() {
   const [name, setName] = useState('');
   const [notes, setNotes] = useState('');
   const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const [key, setKey] = useState(0);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      setKey(prevKey => prevKey + 1);
+    });
+    return unsubscribe;
+  }, [navigation]);
 
   if (!permission) {
     return <View />;
@@ -78,9 +80,13 @@ export default function ScanView() {
       name,
       notes,
       dateAdded: new Date().toLocaleDateString(),
-      photoUri: photoUri || '',
+      photoUri: photoUri,
     };
-    navigation.navigate('index', { plant: newPlant });
+    dispatch(addPlant(newPlant));
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'index' } as never],
+    });
   };
 
   return (
@@ -128,7 +134,6 @@ export default function ScanView() {
           </View>
         </ScrollView>
   
-        {/* Adjusted Save Button Position */}
         <View style={styles.saveButtonWrapper}>
           <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
             <Text style={styles.saveButtonText}>Save Plant</Text>

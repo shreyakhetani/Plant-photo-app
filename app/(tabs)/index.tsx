@@ -1,33 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import { RootState } from '@/redux/store';
+import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, useColorScheme, SafeAreaView, KeyboardAvoidingView, Platform, Image } from 'react-native';
-import { useNavigation, useRoute } from '@react-navigation/native';
-
-interface Plant {
-  id: string;
-  name: string;
-  notes: string;
-  dateAdded: string;
-  photoUri: string;
-}
+import { useNavigation } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 export default function ListScreen() {
-  const [plants, setPlants] = useState<Plant[]>([]);
-  const route = useRoute();
   const navigation = useNavigation();
   const colorScheme = useColorScheme();
-
-  useEffect(() => {
-    const unsubscribe = navigation.addListener('focus', () => {
-      if (route?.params?.plant) {
-        const newPlant = route.params.plant;
-        setPlants((prevPlants) => [...prevPlants, newPlant]);
-        console.log('New plant received:', newPlant);
-      }
-    });
-
-    return unsubscribe;
-  }, [navigation, route?.params?.plant]);
-
+  const plants = useSelector((state: RootState) => state.plants.plants);
   const themeStyles = colorScheme === 'dark' ? darkTheme : lightTheme;
 
   return (
@@ -36,35 +16,30 @@ export default function ListScreen() {
         style={styles.container}
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       >
-        {/* "Add New Plant" button fixed at the top */}
         <View style={styles.fixedButtonContainerTop}>
           <TouchableOpacity
             style={[styles.addButton, themeStyles.addButton]}
-            onPress={() => navigation.navigate('scan')}
+            onPress={() => navigation.navigate('scan' as never)}
           >
             <Text style={[styles.addButtonText, themeStyles.addButtonText]}>+ Add New Plant</Text>
           </TouchableOpacity>
         </View>
 
-        {/* "Plant List" header with top margin */}
         <Text style={[styles.header, themeStyles.text, styles.headerMargin]}>
           Plant List
         </Text>
 
-        {/* New ScrollView style */}
         <ScrollView contentContainerStyle={[styles.scrollViewContent]}>
           {plants.length > 0 ? (
             plants.map((plant) => (
               <View key={plant.id} style={[styles.plantItem, themeStyles.plantItem]}>
                 <View style={styles.plantDetails}>
-                  {/* Left side: Name, Notes, and Date */}
                   <View style={styles.textContainer}>
                     <Text style={[styles.plantName, themeStyles.text]}>{plant.name}</Text>
                     <Text style={[styles.plantNotes, themeStyles.text]}>{plant.notes}</Text>
                     <Text style={[styles.plantDate, themeStyles.text]}>{plant.dateAdded}</Text>
                   </View>
                   
-                  {/* Right side: Image */}
                   <Image source={{ uri: plant.photoUri }} style={styles.image} />
                 </View>
               </View>
@@ -92,27 +67,27 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   headerMargin: {
-    marginTop: 100, // Adds margin to move the header below the button
-    marginBottom: 20, // Adds margin to move the header below the button
+    marginTop: 100,
+    marginBottom: 20,
   },
   scrollViewContent: {
-    paddingBottom: 80, // Ensure there's space at the bottom (if needed)
+    paddingBottom: 80,
   },
   plantItem: {
     marginBottom: 16,
     padding: 10,
     borderRadius: 8,
-    backgroundColor: '#f9f9f9', // Light background for plant items
-    elevation: 2, // Adds subtle shadow for depth
+    backgroundColor: '#f9f9f9',
+    elevation: 2,
   },
   plantDetails: {
-    flexDirection: 'row', // Layout as row
-    justifyContent: 'space-between', // Space out the name and the image
-    alignItems: 'center', // Vertically center the content
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   textContainer: {
-    flex: 1, // Take up remaining space
-    paddingRight: 10, // Space between text and image
+    flex: 1,
+    paddingRight: 10,
   },
   plantName: {
     fontSize: 18,
@@ -138,7 +113,7 @@ const styles = StyleSheet.create({
   },
   fixedButtonContainerTop: {
     position: 'absolute',
-    top: 20, // Fixed to the top
+    top: 20,
     left: 20,
     right: 20,
     alignItems: 'center',
