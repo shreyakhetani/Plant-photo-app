@@ -1,50 +1,60 @@
-# Welcome to your Expo app 👋
+# Plant Management App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This React Native app allows users to organize and maintain a collection of plants, enabling them to add, modify, and view plant details. The app also supports photo capture for each plant.
 
-## Get started
+## Installation
 
-1. Install dependencies
+### Prerequisites
+
+- Node.js (version 23.7.0)
+- Expo CLI
+- Expo Go app installed on your mobile device
+
+## Setup
+
+1. Clone the repository:
+   
 
    ```bash
-   npm install
+     git clone https://github.com/shreyakhetani/Plant-photo-app.git
    ```
 
-2. Start the app
+2. Navigate to the project folder:
+
+   ```bash
+    cd plant-photo-app
+   ```
+3. Install the required dependencies:
+
+   ```bash
+    npm install
+   ```
+4. Launch the project:
+- Open the app in Expo Go on your phone by scanning the QR code generated in the terminal after running the following command:
 
    ```bash
     npx expo start
    ```
+   
 
-In the output, you'll find options to open the app in a
+## Usage
+The app enables users to manage their plants with the following capabilities:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+- Adding Plants: Use the "+ Add New Plant" button to create a new plant entry, take a photo, and provide details like the plant’s name and notes.
+- Viewing Plants: See a list of all plants with relevant details, including their names, notes, and the date added.
+- Editing Plants: Select any plant to edit its details, including the name, notes, and photo.
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+The app uses the device's camera to capture plant photos and adjusts automatically to light or dark themes depending on the system settings.
 
-## Get a fresh project
+## Features
 
-When you're ready, run:
+- Camera Integration: Capture photos of plants directly within the app.
+- Editable Information: Easily update plant names, notes, and images.
+- Redux for State Management: This app uses Redux to maintain the plant data, ensuring consistency across screens.
 
-```bash
-npm run reset-project
-```
+## Screens:
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- List Screen: Shows all the plants in a scrollable list with options to add new plants or modify existing ones.
+- Scan Screen: Allows you to capture a plant’s photo, enter its name and notes, and save the information.
+- Profile Screen: A screen displaying user profile details (currently displays a placeholder text).
+- Settings Screen: A settings page for adjusting app preferences (currently displays a placeholder text).
